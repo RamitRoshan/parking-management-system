@@ -20,10 +20,7 @@ const ticketRoutes = require("./src/routes/ticket-routes");
 app.use("/api/slots", slotRoutes);
 app.use("/api/tickets", ticketRoutes);
  
-
-// app.get("/", (req, res) => {
-//   res.sendFile(path.join(__dirname, "index.html"));
-// });
+ 
 
 //start the server
 app.listen(port, () => {

@@ -36,19 +36,108 @@ This is a backend system for managing a parking lot with multiple slots for diff
 - Calculates parking fee
 - Rounds up partial hours
 - Frees parking slot
-- Authentication
 
-All APIs are protected using a simple token-based authentication.
 
-Pass token in headers:
-
+### Headers 
+```
 Authorization: secret@123
-📁 Project Structure
-src/
- ├── config/
- ├── controllers/
- ├── middleware/
- ├── models/
- ├── routes/
- ├── utils/
-server.js
+Content-Type: application/json
+```
+
+ 
+
+## How to Run
+
+1. Clone Repository
+```
+git clone https://github.com/your-username/parking-management-system-backend.git
+cd parking-management-system
+```
+
+2. Install Dependencies
+```
+npm install
+```
+
+3. Setup Environment Variables
+
+**Create .env file:**
+```
+PORT=
+DB_URL= 
+SECRET_KEY= 
+```
+
+4. Run Server
+```
+node index.js
+```
+
+5.Open in browser
+   > http://localhost:3030/
+
+
+
+## API Details
+
+### Slots:
+
+1. Create Slot
+```
+POST: http://localhost:3030/api/slots
+```
+
+Body -> raw -> json:
+```
+{
+  "slotNumber": 1,
+  "slotType": "car"
+}
+```
+
+2. Get All Slots
+```
+GET: http://localhost:3030/api/slots
+```
+
+### Vehicle Entry:
+
+1. Create Ticket
+```
+POST: http://localhost:3030/api/tickets/entry
+```
+
+Body -> raw -> json:
+```
+{
+  "vehicleNumber": "JH01AB1234",
+  "vehicleType": "car"
+}
+```
+
+### Vehicle Exit:
+
+1. Exit Vehicle
+
+``` 
+POST: http://localhost:3030/api/tickets/exit
+```
+
+Body -> raw -> json:
+```
+{
+  "vehicleNumber": "JH01AB1234"
+}
+```
+
+<br>
+ 
+
+## Frontend Details
+
+
+**A minimal frontend is included for testing:**
+```md
+- Open http://localhost:3030/ after starting the server
+- we can Create Parking Slot, Vehicle Entry, Vehicle Exit, and All Parking Slots 
+- The frontend updates the list of parking slots automatically after any operation.

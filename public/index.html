@@ -31,7 +31,7 @@
 
      
     <div class="card">
-      <h2>Vehicle Entry (Create Ticket)</h2>
+      <h2>Vehicle Entry</h2>
       <form id="ticketEntryForm">
         <label>Vehicle Number</label>
         <input type="text" id="vehicleNumber" required>
@@ -92,6 +92,7 @@
       getSlots();  
     });
 
+    
     // Vehicle Entry
     document.getElementById('ticketEntryForm').addEventListener('submit', async (e) => {
       e.preventDefault();
