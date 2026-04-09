@@ -27,7 +27,6 @@ const createTicket = async (req, res) => {
       });
     }
 
-     
     const slot = await Slot.findOne({
       slotType: vehicleType,
       isOccupied: false,
@@ -38,12 +37,12 @@ const createTicket = async (req, res) => {
         message: "No slot available",
       });
     }
- 
+
     const ticket = await Ticket.create({
       vehicleNumber,
       slotNumber: slot.slotNumber,
     });
- 
+
     slot.isOccupied = true;
     await slot.save();
 
@@ -53,10 +52,9 @@ const createTicket = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
+    
   }
 };
-
-
 
 const exitVehicle = async (req, res) => {
   try {
@@ -76,16 +74,18 @@ const exitVehicle = async (req, res) => {
       });
     }
 
- 
     const vehicle = await Vehicle.findOne({ vehicleNumber });
     const exitTime = new Date();
 
-  
     const amount = calculatePrice(
       vehicle.vehicleType,
       ticket.entryTime,
       exitTime,
     );
+
+    if (!vehicle) {
+      return res.status(400).json({ message: "Vehicle not found" });
+    }
 
     ticket.exitTime = exitTime;
     ticket.amount = amount;
@@ -106,6 +106,7 @@ const exitVehicle = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
+     
   }
 };
 

@@ -33,8 +33,7 @@ const ticketSchema = new mongoose.Schema(
 );
 
 // Pre hook to generate ticket number
-ticketSchema.pre("save", async function (next) {
-  //Check if ticketNumber already exists
+ticketSchema.pre("save", async function () {
   if (!this.ticketNumber) {
     const lastTicket = await mongoose
       .model("Ticket")
@@ -42,15 +41,12 @@ ticketSchema.pre("save", async function (next) {
       .sort({ createdAt: -1 });
 
     let nextNumber = 1;
-
     if (lastTicket) {
       nextNumber = parseInt(lastTicket.ticketNumber) + 1;
     }
 
     this.ticketNumber = String(nextNumber).padStart(4, "0");
   }
-
-  next();
 });
-
+ 
 module.exports = mongoose.model("Ticket", ticketSchema);
