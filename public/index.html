@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parking Management System</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>Parking Management System</h1>
+
+     
+    <div class="card">
+      <h2>Create Parking Slot</h2>
+      <form id="slotForm">
+        <label>Slot Number</label>
+        <input type="number" id="slotNumber" required>
+
+        <label>Slot Type</label>
+        <select id="slotType">
+          <option value="bike">Bike</option>
+          <option value="car">Car</option>
+          <option value="truck">Truck</option>
+        </select>
+
+        <button type="submit">Create Slot</button>
+      </form>
+    </div>
+
+     
+    <div class="card">
+      <h2>Vehicle Entry (Create Ticket)</h2>
+      <form id="ticketEntryForm">
+        <label>Vehicle Number</label>
+        <input type="text" id="vehicleNumber" required>
+
+        <label>Vehicle Type</label>
+        <select id="vehicleTypeEntry">
+          <option value="bike">Bike</option>
+          <option value="car">Car</option>
+          <option value="truck">Truck</option>
+        </select>
+
+        <button type="submit">Create Ticket</button>
+      </form>
+    </div>
+
+     
+
+    <div class="card">
+      <h2>Vehicle Exit</h2>
+      <form id="ticketExitForm">
+        <label>Vehicle Number</label>
+        <input type="text" id="vehicleExitNumber" required>
+
+        <button type="submit">Exit Vehicle</button>
+      </form>
+    </div>
+
+    
+    <div class="card">
+      <h2>All Parking Slots</h2>
+      <!-- <button onclick="getSlots()">Load Slots</button> -->
+      <ul id="slotList"></ul>
+    </div>
+  </div>
+
+  <script>
+    const AUTH_TOKEN = 'secret@123';
+
+    //Create Slot 
+    document.getElementById('slotForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const slotNumber = document.getElementById('slotNumber').value;
+      const slotType = document.getElementById('slotType').value;
+
+      const res = await fetch('/api/slots', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': AUTH_TOKEN
+        },
+        body: JSON.stringify({ slotNumber, slotType })
+      });
+
+      const data = await res.json();
+      alert(data.message || JSON.stringify(data));
+
+      getSlots();  
+    });
+
+    // Vehicle Entry
+    document.getElementById('ticketEntryForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const vehicleNumber = document.getElementById('vehicleNumber').value;
+      const vehicleType = document.getElementById('vehicleTypeEntry').value;
+
+      const res = await fetch('/api/tickets/entry', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': AUTH_TOKEN
+        },
+        body: JSON.stringify({ vehicleNumber, vehicleType })
+      });
+
+      const data = await res.json();
+      alert(data.message || JSON.stringify(data));
+
+      getSlots(); 
+    });
+
+    // Vehicle Exit  
+    document.getElementById('ticketExitForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const vehicleNumber = document.getElementById('vehicleExitNumber').value;
+
+      const res = await fetch('/api/tickets/exit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': AUTH_TOKEN
+        },
+        body: JSON.stringify({ vehicleNumber })
+      });
+
+      const data = await res.json();
+      alert(data.message || JSON.stringify(data));
+
+      getSlots();  
+    });
+
+    // Get All Slots 
+    async function getSlots() {
+      const res = await fetch('/api/slots', {
+        method: 'GET',
+        headers: {
+          'Authorization': AUTH_TOKEN
+        }
+      });
+
+      const data = await res.json();
+
+      const slotList = document.getElementById('slotList');
+      slotList.innerHTML = "";
+
+      data.forEach(slot => {
+        const li = document.createElement('li');
+        li.textContent = `Slot ${slot.slotNumber} | ${slot.slotType.toUpperCase()} | ${slot.isOccupied ? "❌ Occupied" : "✅ Available"}`;
+        slotList.appendChild(li);
+      });
+    }
+
+    // Load slots on page load
+    window.onload = getSlots;
+  </script>
+
+</body>
+</html>
