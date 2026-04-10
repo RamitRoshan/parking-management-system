@@ -1,6 +1,6 @@
 const Slot = require("../models/slot-model");
 
-//create slots
+ 
 const createSlot = async (req, res) => {
   try {
     const { slotNumber, slotType } = req.body;
@@ -22,7 +22,7 @@ const createSlot = async (req, res) => {
   }
 };
 
-//getting all slots
+ 
 const getSlots = async (req, res) => {
   try {
     const slots = await Slot.find().sort({ slotNumber: 1 });

@@ -27,9 +27,7 @@ const createTicket = async (req, res) => {
       });
     }
 
-    // Atomic slot allocation to prevent race conditions
-    // Ensures only one request can reserve a slot at a time
-
+    // Atomic slot allocation to prevent race conditions,only one request can reserve a slot at a time
     const slot = await Slot.findOneAndUpdate(
       { slotType: vehicleType, isOccupied: false },
       { isOccupied: true },
@@ -91,8 +89,7 @@ const exitVehicle = async (req, res) => {
     ticket.amount = amount;
     ticket.isActive = false;
     await ticket.save();
-
-    //free slot
+ 
     const slot = await Slot.findOne({
       slotNumber: ticket.slotNumber,
     });
