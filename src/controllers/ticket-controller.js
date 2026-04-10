@@ -27,10 +27,14 @@ const createTicket = async (req, res) => {
       });
     }
 
-    const slot = await Slot.findOne({
-      slotType: vehicleType,
-      isOccupied: false,
-    }).sort({ slotNumber: 1 });
+    // Atomic slot allocation to prevent race conditions
+    // Ensures only one request can reserve a slot at a time
+
+    const slot = await Slot.findOneAndUpdate(
+      { slotType: vehicleType, isOccupied: false },
+      { isOccupied: true },
+      { new: true, sort: { slotNumber: 1 } },
+    );
 
     if (!slot) {
       return res.status(400).json({
@@ -43,16 +47,12 @@ const createTicket = async (req, res) => {
       slotNumber: slot.slotNumber,
     });
 
-    slot.isOccupied = true;
-    await slot.save();
-
     res.status(201).json({
       message: "Ticket created successfully",
       ticket,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
-    
   }
 };
 
@@ -106,7 +106,6 @@ const exitVehicle = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
-     
   }
 };
 

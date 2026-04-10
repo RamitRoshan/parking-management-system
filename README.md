@@ -18,6 +18,12 @@ This is a backend system for managing a parking lot with multiple slots for diff
 
 ## Features
 
+
+
+## Concurrency Handling
+- Implemented atomic slot allocation using `findOneAndUpdate` to prevent race conditions when multiple vehicles try to book the same slot simultaneously.
+- Ensures that only one request can successfully reserve a slot, even when multiple users try at the same time.
+
 ### Vehicle Entry: 
 - Creates or validates vehicle
 - Assigns nearest available slot
