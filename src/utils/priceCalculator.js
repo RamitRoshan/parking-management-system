@@ -22,4 +22,3 @@ const calculatePrice = (vehicleType, entryTime, exitTime) => {
 module.exports = calculatePrice;
 
 
-//calculating parking price based on vehicle type, entryTime and exitTime
