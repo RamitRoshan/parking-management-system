@@ -34,6 +34,7 @@ const createTicket = async (req, res) => {
       { new: true, sort: { slotNumber: 1 } },
     );
 
+    //if no slot is available
     if (!slot) {
       return res.status(400).json({
         message: "No slot available",
